@@ -9,8 +9,6 @@ import init.resources.RESOURCE;
 import init.resources.RESOURCES;
 import init.sprite.SPRITES;
 import init.sprite.UI.Icon;
-import profitability.CalculationUtils;
-import profitability.RoomInstanceRateCalculator;
 import settlement.misc.job.JOBMANAGER_HASER;
 import settlement.misc.util.RESOURCE_TILE;
 import settlement.room.industry.module.INDUSTRY_HASER;
@@ -48,9 +46,6 @@ import view.main.VIEW;
 import view.sett.ui.room.Modules.ModuleMaker;
 
 import java.util.Arrays;
-
-import static profitability.CalculationUtils.TRADE_BUY_PRICE;
-import static profitability.CalculationUtils.TRADE_SELL_PRICE;
 
 final class ModuleIndustry implements ModuleMaker {
 
@@ -518,55 +513,7 @@ final class ModuleIndustry implements ModuleMaker {
 				section.addRelBody(4, DIR.S, all);
 			}
 
-			// FIXME refactor
-			{
-				String ¤¤Profitability = "Profitability";
-				GuiSection all = new GuiSection();
-
-				all.addRightC(6, new GStat() {
-					@Override
-					public void update(GText text) {
-						text.add("ex: -¤");
-						GFORMAT.f(text, CalculationUtils.getExpenses(
-								((ROOM_PRODUCER) get.get()).industry(),
-								new RoomInstanceRateCalculator(get.get()), TRADE_SELL_PRICE), 0);
-					}
-				}.r());
-
-				all.add(new GStat() {
-					@Override
-					public void update(GText text) {
-						text.add("inc: ¤");
-						GFORMAT.f(text, CalculationUtils.getIncomes(
-								((ROOM_PRODUCER) get.get()).industry(),
-								new RoomInstanceRateCalculator(get.get()), TRADE_SELL_PRICE), 0);
-					}
-				}.r(), all.getLastX1(), all.getLastY2()+1);
-
-				all.add(new GStat() {
-					@Override
-					public void update(GText text) {
-						text.add("vadd ¤");
-						GFORMAT.f(text, CalculationUtils.getValueAdded(
-								((ROOM_PRODUCER) get.get()).industry(),
-								new RoomInstanceRateCalculator(get.get())), 0);
-					}
-				}.r(), all.getLastX1(), all.getLastY2()+1);
-
-				all.add(new GStat() {
-					@Override
-					public void update(GText text) {
-						text.add("prf: ¤");
-						GFORMAT.f(text, CalculationUtils.getTradeProfit(
-								((ROOM_PRODUCER) get.get()).industry(),
-								new RoomInstanceRateCalculator(get.get())), 0);
-					}
-				}.r(), all.getLastX1(), all.getLastY2()+1);
-
-				all.addRelBody(2, DIR.N, new GHeader(¤¤Profitability));
-
-				section.addRelBody(4, DIR.S, all);
-			}
+			ProfitabilityUI.drawProfitabilitySection(section, get);
 
 			if (ins.size() <= 1)
 				return;
@@ -746,45 +693,7 @@ final class ModuleIndustry implements ModuleMaker {
 
 		s.addRightC(6, h);
 
-		// TODO refactor
-
-		h = new GStat() {
-
-			@Override
-			public void update(GText text) {
-				IndustryResource i = ((ROOM_PRODUCER) g(get)).industry().ins().get(ri);
-				RoomInstance ins = (RoomInstance) get.get();
-
-				double sellPrice = FACTIONS.player().trade.pricesSell.get(i.resource);
-				double n = IndustryUtil.calcConsumptionRate(i.rate, (g(get)).industry(), (RoomInstance) get.get(), i.resource);
-
-				text.add("E-¤");
-				GFORMAT.f(text, (n * sellPrice), 1);
-			}
-		}.r();
-
-		s.add(h, s.getLast().x1(), s.getLastY2()+1);
-//		s.addRightC(6, h);
-
-		h = new GStat() {
-
-			@Override
-			public void update(GText text) {
-				Industry industry = (g(get)).industry();
-				IndustryResource i = industry.ins().get(ri);
-				RoomInstance ins = (RoomInstance) get.get();
-
-				double buyPrice = FACTIONS.player().trade.pricesBuy.get(i.resource);
-
-				double n = IndustryUtil.calcConsumptionRate(i.rate, industry, ins, i.resource);
-
-				text.add("I-¤");
-				GFORMAT.f(text, (n * buyPrice), 1);
-			}
-		}.r();
-
-		s.add(h, s.getLast().x1(), s.getLastY2()+1);
-//		s.addRightC(6, h);
+		ProfitabilityUI.drawInputProfitability(ri, get, s);
 
 		s.body().incrW(48);
 		s.pad(4);
@@ -884,40 +793,7 @@ final class ModuleIndustry implements ModuleMaker {
 
 		s.add(h, s.getLast().x1(), s.getLastY2()+1);
 
-		// FIXME refactor
-
-		h = new GStat() {
-
-			@Override
-			public void update(GText text) {
-				RoomInstance ins = (RoomInstance) get.get();
-				IndustryResource i = ((ROOM_PRODUCER) ins).industry().outs().get(ri);
-
-				double buyPriceEquivalentPP = CalculationUtils.priceInputResource(i, new RoomInstanceRateCalculator(ins), TRADE_BUY_PRICE);
-
-				text.add("I¤");
-				GFORMAT.f(text, buyPriceEquivalentPP, 1);
-//				GFORMAT.fRel(text, n*ins.employees().efficiency(), n);
-			}
-		}.r();
-
-		s.add(h, s.getLast().x1(), s.getLastY2()+1);
-
-		h = new GStat() {
-
-			@Override
-			public void update(GText text) {
-				IndustryResource i = ((ROOM_PRODUCER) g(get)).industry().outs().get(ri);
-				RoomInstance ins = (RoomInstance) get.get();
-				double sellPrice = FACTIONS.player().trade.pricesSell.get(i.resource);
-				double n = IndustryUtil.calcProductionRate(i.rate, ((ROOM_PRODUCER) ins).industry(), ins);
-
-				text.add("E¤");
-				GFORMAT.f(text, (n * sellPrice), 1);
-			}
-		}.r();
-
-		s.add(h, s.getLast().x1(), s.getLastY2()+1);
+		ProfitabilityUI.drawOutputProfitability(ri, get, s);
 
 		s.body().incrW(48);
 		s.pad(4);
