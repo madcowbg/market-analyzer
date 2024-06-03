@@ -16,8 +16,13 @@ There are a couple of metrics shown in terms of profitability:
  - **Trade profit** - buy the inputs and sell the outputs.
  - **Consumption profit** - instead of buying the commodity, but inputs and produce.
 
+# Where?
+![Minimap additions](doc/img/Minimap-Resource-Analysis.png)
+
+![Industry additions](doc/img/Industry-Resource-Analysis.png)
+
+# Non-goals / Limitations
 TODO Non-goals/limitations.
-TODO Screenshots.
 
 # Original mod build instructions
 See below.
