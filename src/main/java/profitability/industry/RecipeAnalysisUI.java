@@ -1,4 +1,4 @@
-package view.sett.ui.minimap;
+package profitability.industry;
 
 import init.resources.RESOURCE;
 import profitability.CalculationUtils;
@@ -22,7 +22,7 @@ public class RecipeAnalysisUI {
         }
     };
 
-    static void drawPossibleRecipes(GBox b, RESOURCE res) {
+    public static void drawPossibleRecipes(GBox b, RESOURCE res) {
         for (Industry recipe : SETT.ROOMS().INDUSTRIES) {
             b.sep();
 

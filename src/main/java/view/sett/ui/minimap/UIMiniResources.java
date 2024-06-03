@@ -7,6 +7,7 @@ import init.resources.RESOURCE;
 import init.resources.RESOURCES;
 import init.sprite.SPRITES;
 import init.sprite.UI.UI;
+import profitability.industry.RecipeAnalysisUI;
 import settlement.main.SETT;
 import settlement.room.industry.module.Industry.IndustryResource;
 import settlement.room.main.RoomInstance;

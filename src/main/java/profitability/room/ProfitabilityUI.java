@@ -1,4 +1,4 @@
-package view.sett.ui.room;
+package profitability.room;
 
 import game.faction.FACTIONS;
 import profitability.CalculationUtils;

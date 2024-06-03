@@ -9,6 +9,7 @@ import init.resources.RESOURCE;
 import init.resources.RESOURCES;
 import init.sprite.SPRITES;
 import init.sprite.UI.Icon;
+import profitability.room.ProfitabilityUI;
 import settlement.misc.job.JOBMANAGER_HASER;
 import settlement.misc.util.RESOURCE_TILE;
 import settlement.room.industry.module.INDUSTRY_HASER;

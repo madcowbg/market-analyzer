@@ -1,4 +1,4 @@
-package view.sett.ui.minimap;
+package profitability.industry;
 
 import init.resources.RESOURCE;
 import settlement.room.industry.module.Industry;
