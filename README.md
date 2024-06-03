@@ -1,3 +1,27 @@
+# Why?
+
+Market prices in Songs of Syx are somewhat randomized and change all the time. At the same time, they are crucial for creating a profitable city,
+as it is possible to have the two extremes - being cheaper to import than to produce, as well as wildly profitable industries.
+
+Recently there have been spreadsheets created by players to accomplish the computations, but they require tedious copy-pasting of prices, which fluctuate daily and present a substantial hurdle to usage.
+
+The goal is the market analyzer is to show in-game in UI with the estimated profit from running various industries, as well as to suggest the most efficient way to obtain materials to use.
+
+# How?
+
+Because the buy-sell spread can be substantial, we define a few metrics to account for each specific use case.
+
+There are a couple of metrics shown in terms of profitability:
+ - **Value added** - profitability if we sell the output instead of selling the inputs.
+ - **Trade profit** - buy the inputs and sell the outputs.
+ - **Consumption profit** - instead of buying the commodity, but inputs and produce.
+
+TODO Non-goals/limitations.
+TODO Screenshots.
+
+# Original mod build instructions
+See below.
+
 **For V66**
 
 This project is intended for people who want to start modding for the game [Songs of Syx](https://store.steampowered.com/app/1162750/Songs_of_Syx/).
