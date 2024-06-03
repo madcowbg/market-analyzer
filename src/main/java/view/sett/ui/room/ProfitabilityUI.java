@@ -3,7 +3,7 @@ package view.sett.ui.room;
 import game.faction.FACTIONS;
 import profitability.CalculationUtils;
 import profitability.Pricing;
-import profitability.RoomInstanceRateCalculator;
+import profitability.room.RoomInstanceRateCalculator;
 import settlement.room.industry.module.Industry;
 import settlement.room.industry.module.IndustryUtil;
 import settlement.room.industry.module.ROOM_PRODUCER;

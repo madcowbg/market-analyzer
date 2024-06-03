@@ -1,5 +1,6 @@
-package profitability;
+package profitability.room;
 
+import profitability.RateCalculator;
 import settlement.room.industry.module.Industry;
 import settlement.room.industry.module.IndustryUtil;
 import settlement.room.industry.module.ROOM_PRODUCER;
