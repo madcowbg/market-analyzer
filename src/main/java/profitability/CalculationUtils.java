@@ -2,47 +2,47 @@ package profitability;
 
 import game.faction.FACTIONS;
 import settlement.room.industry.module.Industry;
-import settlement.room.industry.module.ROOM_PRODUCER;
-import settlement.room.main.RoomInstance;
-import snake2d.util.sets.LIST;
 
 public class CalculationUtils {
+    public static Pricing TRADE_BUY_PRICE = resource -> FACTIONS.player().trade.pricesBuy.get(resource);
+    public static Pricing TRADE_SELL_PRICE = resource -> FACTIONS.player().trade.pricesSell.get(resource);
 
-    public static double getBuyPriceEquivalentIncomePP(Industry.IndustryResource i, RateCalculator rateCalculator) {
+
+    public static double priceOutputResource(Industry.IndustryResource i, RateCalculator rateCalculator, Pricing pricing) {
         double n = rateCalculator.productionRate(i);
-        double buyPrice = FACTIONS.player().trade.pricesBuy.get(i.resource);
+        double buyPrice = pricing.price(i.resource);
 
         return (n * buyPrice);
     }
 
-    public static double getBuyPriceEquivalentExpensePP(Industry.IndustryResource i, RateCalculator rateCalculator) {
+    public static double priceInputResource(Industry.IndustryResource i, RateCalculator rateCalculator, Pricing pricing) {
         double n = rateCalculator.consumptionRate(i);
-        double buyPrice = FACTIONS.player().trade.pricesBuy.get(i.resource);
+        double buyPrice = pricing.price(i.resource);
 
         return (n * buyPrice);
     }
 
-    public static double getExpensesPP(RoomInstance ins){
-        RoomInstanceRateCalculator rateCalculator = new RoomInstanceRateCalculator(ins);
-        LIST<Industry.IndustryResource> resources = ((ROOM_PRODUCER) ins).industry().ins();
+    public static double getExpenses(Industry industry, RateCalculator rateCalculator, Pricing pricing){
         double costs = 0;
-        for (Industry.IndustryResource res: resources) {
-            costs += CalculationUtils.getBuyPriceEquivalentExpensePP(res, rateCalculator);
+        for (Industry.IndustryResource res: industry.ins()) {
+            costs += CalculationUtils.priceInputResource(res, rateCalculator, pricing);
         }
         return costs;
     }
 
-    public static double getIncomesPP(RoomInstance ins){
-        RoomInstanceRateCalculator rateCalculator = new RoomInstanceRateCalculator(ins);
-        LIST<Industry.IndustryResource> resources = ((ROOM_PRODUCER) ins).industry().outs();
+    public static double getIncomes(Industry industry, RateCalculator rateCalculator, Pricing pricing){
         double costs = 0;
-        for (Industry.IndustryResource res: resources) {
-            costs += CalculationUtils.getBuyPriceEquivalentIncomePP(res, rateCalculator);
+        for (Industry.IndustryResource res: industry.outs()) {
+            costs += CalculationUtils.priceOutputResource(res, rateCalculator, pricing);
         }
         return costs;
     }
 
-    public static double getProfitPP(RoomInstance roomInstance) {
-        return getIncomesPP(roomInstance) - getExpensesPP(roomInstance);
+    public static double getTradeProfit(Industry industry, RateCalculator rateCalculator) {
+        return getIncomes(industry, rateCalculator, TRADE_SELL_PRICE) - getExpenses(industry, rateCalculator, TRADE_BUY_PRICE);
+    }
+
+    public static double getValueAdded(Industry industry, RateCalculator rateCalculator) {
+        return getIncomes(industry, rateCalculator, TRADE_SELL_PRICE) - getExpenses(industry, rateCalculator, TRADE_SELL_PRICE);
     }
 }

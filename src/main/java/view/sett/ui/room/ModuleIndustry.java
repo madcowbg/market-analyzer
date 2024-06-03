@@ -49,6 +49,9 @@ import view.sett.ui.room.Modules.ModuleMaker;
 
 import java.util.Arrays;
 
+import static profitability.CalculationUtils.TRADE_BUY_PRICE;
+import static profitability.CalculationUtils.TRADE_SELL_PRICE;
+
 final class ModuleIndustry implements ModuleMaker {
 
 	private final GChart chart = new GChart();
@@ -524,7 +527,9 @@ final class ModuleIndustry implements ModuleMaker {
 					@Override
 					public void update(GText text) {
 						text.add("ex: -¤");
-						GFORMAT.f(text, CalculationUtils.getExpensesPP(get.get()), 0);
+						GFORMAT.f(text, CalculationUtils.getExpenses(
+								((ROOM_PRODUCER) get.get()).industry(),
+								new RoomInstanceRateCalculator(get.get()), TRADE_SELL_PRICE), 0);
 					}
 				}.r());
 
@@ -532,7 +537,19 @@ final class ModuleIndustry implements ModuleMaker {
 					@Override
 					public void update(GText text) {
 						text.add("inc: ¤");
-						GFORMAT.f(text, CalculationUtils.getIncomesPP(get.get()), 0);
+						GFORMAT.f(text, CalculationUtils.getIncomes(
+								((ROOM_PRODUCER) get.get()).industry(),
+								new RoomInstanceRateCalculator(get.get()), TRADE_SELL_PRICE), 0);
+					}
+				}.r(), all.getLastX1(), all.getLastY2()+1);
+
+				all.add(new GStat() {
+					@Override
+					public void update(GText text) {
+						text.add("vadd ¤");
+						GFORMAT.f(text, CalculationUtils.getValueAdded(
+								((ROOM_PRODUCER) get.get()).industry(),
+								new RoomInstanceRateCalculator(get.get())), 0);
 					}
 				}.r(), all.getLastX1(), all.getLastY2()+1);
 
@@ -540,7 +557,9 @@ final class ModuleIndustry implements ModuleMaker {
 					@Override
 					public void update(GText text) {
 						text.add("prf: ¤");
-						GFORMAT.f(text, CalculationUtils.getProfitPP(get.get()), 0);
+						GFORMAT.f(text, CalculationUtils.getTradeProfit(
+								((ROOM_PRODUCER) get.get()).industry(),
+								new RoomInstanceRateCalculator(get.get())), 0);
 					}
 				}.r(), all.getLastX1(), all.getLastY2()+1);
 
@@ -874,7 +893,7 @@ final class ModuleIndustry implements ModuleMaker {
 				RoomInstance ins = (RoomInstance) get.get();
 				IndustryResource i = ((ROOM_PRODUCER) ins).industry().outs().get(ri);
 
-				double buyPriceEquivalentPP = CalculationUtils.getBuyPriceEquivalentExpensePP(i, new RoomInstanceRateCalculator(ins));
+				double buyPriceEquivalentPP = CalculationUtils.priceInputResource(i, new RoomInstanceRateCalculator(ins), TRADE_BUY_PRICE);
 
 				text.add("I¤");
 				GFORMAT.f(text, buyPriceEquivalentPP, 1);
