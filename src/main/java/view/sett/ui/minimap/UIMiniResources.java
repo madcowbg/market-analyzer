@@ -8,9 +8,7 @@ import init.resources.RESOURCES;
 import init.sprite.SPRITES;
 import init.sprite.UI.UI;
 import settlement.main.SETT;
-import settlement.room.industry.module.Industry;
 import settlement.room.industry.module.Industry.IndustryResource;
-import settlement.room.industry.workshop.ROOM_WORKSHOP;
 import settlement.room.main.RoomInstance;
 import settlement.room.main.RoomProduction.Source;
 import snake2d.MButt;
@@ -334,29 +332,8 @@ final class UIMiniResources extends Expansion{
 					b.text(¤¤Exists);
 				}
 
-				// FIXME refactor
-				b.sep();
+				RecipeAnalysisUI.drawPossibleRecipes(b, res);
 
-//				for (ROOM_WORKSHOP workshop: SETT.ROOMS().WORKSHOPS) {
-					for (Industry recipe: SETT.ROOMS().INDUSTRIES) {
-						if (ProducerUtils.hasOutput(recipe, res)) {
-							b.text("Recipe from " + recipe.blue.key);
-							b.NL();
-
-							for(IndustryResource resourceIn:  recipe.ins()) {
-								b.text("IN " + resourceIn.rate + " x " + resourceIn.resource);
-								b.NL();
-							}
-
-							for(IndustryResource resourceOut:  recipe.outs()) {
-								b.text("OUT " + resourceOut.rate + " x " + resourceOut.resource);
-								b.NL();
-							}
-						}
-
-//					}
-				}
-				
 				super.hoverInfoGet(text);
 			}
 
@@ -423,7 +400,7 @@ final class UIMiniResources extends Expansion{
 			}
 		};
 	}
-	
+
 	private static RENDEROBJ stat(RESOURCE res) {
 		return new GStat() {
 			
