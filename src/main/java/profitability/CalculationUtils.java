@@ -49,4 +49,8 @@ public class CalculationUtils {
     public static double getConsumptionProfit(Industry industry, RateCalculator rateCalculator) {
         return getIncomes(industry, rateCalculator, TRADE_BUY_PRICE) - getExpenses(industry, rateCalculator, TRADE_BUY_PRICE);
     }
+
+    public static double getTradeInstead(Industry industry, RateCalculator rateCalculator) {
+        return getExpenses(industry, rateCalculator, TRADE_SELL_PRICE) - getIncomes(industry, rateCalculator, TRADE_BUY_PRICE);
+    }
 }
